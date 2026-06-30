@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Kyougi Hub</title>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <div id="toast" class="toast hidden"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <img
+        src="official.png"
+        alt="Kyougi Hub Logo"
+        class="brand-logo"
+        onerror="this.style.display='none'"
+      />
+
+      <div>
+        <h1>Kyougi Hub</h1>
+        <p id="tagline">Scrim, tournament, recruitment and community promotion hub.</p>
+      </div>
+    </div>
+
+    <div class="top-actions">
+      <select id="languageSelect" class="select compact">
+        <option value="en">English</option>
+        <option value="ms">Malay</option>
+        <option value="id">Indonesian</option>
+        <option value="tl">Tagalog</option>
+        <option value="zh">Mandarin</option>
+        <option value="ta">Tamil</option>
+      </select>
+
+      <div id="authMini" class="auth-mini"></div>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab active" data-tab="home">Home</button>
+    <button class="tab" data-tab="post">Post</button>
+    <button class="tab" data-tab="teams">Teams</button>
+    <button class="tab" data-tab="leaderboard">Leaderboard</button>
+    <button class="tab" data-tab="live">Live</button>
+    <button class="tab" data-tab="teamManagement">Team Management</button>
+    <button class="tab hidden admin-only" data-tab="admin">Admin / Owner</button>
+  </nav>
+
+  <main class="container">
+    <section id="home" class="section active-section">
+      <div class="hero card">
+        <div>
+          <p class="eyebrow">MLBB Community Platform</p>
+
+          <h2>Welcome to Kyougi Hub</h2>
+
+          <p>
+            Find scrim slots, tournaments, players, managers, coaches, teams,
+            leaderboard and community promotion in one place.
+          </p>
+
+          <div class="hero-actions">
+            <button class="btn primary" data-tab-target="post">Create Post</button>
+            <button class="btn ghost" data-tab-target="teams">View Teams</button>
+          </div>
+        </div>
+
+        <div class="hero-panel">
+          <img
+            src="official.png"
+            alt="Kyougi Hub"
+            onerror="this.style.display='none'"
+          />
+
+          <h3>Kyougi Hub</h3>
+          <p>Simple. Clean. Competitive.</p>
+        </div>
+      </div>
+
+      <div class="section-head">
+        <div>
+          <h2>Public Feed</h2>
+          <p class="muted">Scrim, tournament, recruitment and official advertisement posts.</p>
+        </div>
+
+        <select id="feedFilter" class="select">
+          <option value="all">All Posts</option>
+          <option value="scrim">Scrim</option>
+          <option value="tournament">Tournament</option>
+          <option value="recruitPlayer">Player Recruitment</option>
+          <option value="recruitStaff">Manager / Coach Recruitment</option>
+          <option value="advertisement">Advertisement</option>
+        </select>
+      </div>
+
+      <div id="feedList" class="grid feed-grid"></div>
+    </section>
+
+    <section id="auth" class="section">
+      <div class="section-head">
+        <div>
+          <h2>Login / Sign Up</h2>
+          <p class="muted">Login is only required when posting, registering or managing teams.</p>
+        </div>
+      </div>
+
+      <div class="auth-layout">
+        <article class="card">
+          <h3>Login</h3>
+
+          <form id="loginForm" class="form">
+            <label>
+              Email
+              <input id="loginEmail" type="email" required />
+            </label>
+
+            <label>
+              Password
+              <input id="loginPassword" type="password" required />
+            </label>
+
+            <button class="btn primary" type="submit">Login</button>
+            <button class="btn ghost" id="forgotPasswordBtn" type="button">Forgot Password?</button>
+          </form>
+        </article>
+
+        <article class="card">
+          <h3>Create Account</h3>
+
+          <form id="signupForm" class="form">
+            <label>
+              Display Name
+              <input id="signupName" type="text" required maxlength="40" />
+            </label>
+
+            <label>
+              Email
+              <input id="signupEmail" type="email" required />
+            </label>
+
+            <label>
+              Password
+              <input id="signupPassword" type="password" required minlength="6" />
+            </label>
+
+            <label>
+              Role
+              <select id="signupRole" required>
+                <option value="player">Player</option>
+                <option value="teamLeader">Team Leader</option>
+                <option value="teamManager">Team Manager</option>
+                <option value="coach">Coach</option>
+                <option value="admin">Admin</option>
+              </select>
+            </label>
+
+            <p class="notice">
+              Admin account needs owner approval first.
+              Owner email: <b>sanzokece@gmail.com</b>
+            </p>
+
+            <button class="btn primary" type="submit">Create Account</button>
+          </form>
+        </article>
+      </div>
+    </section>
+
+    <section id="post" class="section">
+      <div class="section-head">
+        <div>
+          <h2>Create Post</h2>
+          <p class="muted">Choose post type below. Scam-looking posts will be auto-blocked by the bot.</p>
+        </div>
+      </div>
+
+      <div class="post-grid">
+        <article class="card">
+          <h3>Post Scrim</h3>
+
+          <form id="scrimForm" class="form">
+            <label>
+              Team Name
+              <input id="scrimTeamName" type="text" required />
+            </label>
+
+            <div class="two-col">
+              <label>
+                Date
+                <input id="scrimDate" type="date" required />
+              </label>
+
+              <label>
+                Time
+                <input id="scrimTime" type="time" required />
+              </label>
+            </div>
+
+            <label>
+              Format
+              <select id="scrimFormat" required>
+                <option value="BO1">BO1</option>
+                <option value="BO2">BO2</option>
+                <option value="BO3">BO3</option>
+                <option value="BO5">BO5</option>
+              </select>
+            </label>
+
+            <button class="btn primary" type="submit">Submit Scrim</button>
+          </form>
+        </article>
+
+        <article class="card">
+          <h3>Post Tournament</h3>
+
+          <form id="tournamentForm" class="form">
+            <label>
+              Tournament Name
+              <input id="tourName" type="text" required />
+            </label>
+
+            <div class="two-col">
+              <label>
+                Date
+                <input id="tourDate" type="date" required />
+              </label>
+
+              <label>
+                Time
+                <input id="tourTime" type="time" required />
+              </label>
+            </div>
+
+            <div class="two-col">
+              <label>
+                Registration Fee
+                <input id="tourFee" type="number" min="0" step="0.01" required />
+              </label>
+
+              <label>
+                Prizepool
+                <input id="tourPrizepool" type="number" min="0" step="0.01" required />
+              </label>
+            </div>
+
+            <div class="two-col">
+              <label>
+                Max Participant
+                <input id="tourMax" type="number" min="2" required />
+              </label>
+
+              <label>
+                Format
+                <select id="tourFormat" required>
+                  <option value="Single Elimination">Single Elimination</option>
+                  <option value="Double Elimination">Double Elimination</option>
+                  <option value="Round Robin">Round Robin</option>
+                  <option value="Swiss">Swiss</option>
+                </select>
+              </label>
+            </div>
+
+            <label>
+              Venue
+              <select id="tourVenueType" required>
+                <option value="online">Online</option>
+                <option value="offline">Offline</option>
+              </select>
+            </label>
+
+            <label id="tourLocationWrap" class="hidden">
+              Exact Location
+              <input id="tourLocation" type="text" />
+            </label>
+
+            <label>
+              Bank
+              <select id="tourBank" required></select>
+            </label>
+
+            <div id="bankPreview" class="bank-preview"></div>
+
+            <label>
+              Bank Account Number
+              <input id="tourBankAccount" type="text" required />
+            </label>
+
+            <label>
+              Organizer Phone Number
+              <input id="tourPhone" type="tel" placeholder="Example: 60123456789" required />
+            </label>
+
+            <p class="notice">
+              Phone number is private. Public users only see WhatsApp redirect link to send receipt.
+            </p>
+
+            <button class="btn primary" type="submit">Submit Tournament</button>
+          </form>
+        </article>
+
+        <article class="card">
+          <h3>Recruit Player</h3>
+
+          <form id="recruitPlayerForm" class="form">
+            <label>
+              Team Name
+              <input id="rpTeam" type="text" required />
+            </label>
+
+            <div class="two-col">
+              <label>
+                Highest Rank
+                <input id="rpRank" type="text" placeholder="Mythical Glory / Immortal" required />
+              </label>
+
+              <label>
+                ML Role
+                <select id="rpRole" required>
+                  <option value="Gold Lane">Gold Lane</option>
+                  <option value="EXP Lane">EXP Lane</option>
+                  <option value="Jungler">Jungler</option>
+                  <option value="Mid Lane">Mid Lane</option>
+                  <option value="Roamer">Roamer</option>
+                  <option value="Flex">Flex</option>
+                </select>
+              </label>
+            </div>
+
+            <div class="two-col">
+              <label>
+                Winrate All Season
+                <input id="rpWinrate" type="number" min="0" max="100" required />
+              </label>
+
+              <label>
+                Age
+                <input id="rpAge" type="number" min="10" max="60" required />
+              </label>
+            </div>
+
+            <label>
+              Location
+              <input id="rpLocation" type="text" required />
+            </label>
+
+            <button class="btn primary" type="submit">Submit Recruitment</button>
+          </form>
+        </article>
+
+        <article class="card">
+          <h3>Recruit Manager / Coach</h3>
+
+          <form id="recruitStaffForm" class="form">
+            <label>
+              Team Name
+              <input id="rsTeam" type="text" required />
+            </label>
+
+            <label>
+              Looking For
+              <select id="rsLookingFor" required>
+                <option value="Manager">Manager</option>
+                <option value="Coach">Coach</option>
+                <option value="Manager / Coach">Manager / Coach</option>
+              </select>
+            </label>
+
+            <label>
+              Requirement
+              <textarea id="rsRequirement" rows="4" required></textarea>
+            </label>
+
+            <button class="btn primary" type="submit">Submit Recruitment</button>
+          </form>
+        </article>
+
+        <article class="card wide-card">
+          <h3>Order Paid Advertisement</h3>
+
+          <div class="payment-box">
+            <img
+              src="payqr.png"
+              alt="Payment QR"
+              onerror="this.alt='Put payqr.png in your project folder';"
+            />
+
+            <div>
+              <h4>Payment QR</h4>
+              <p class="muted">
+                Double check your phone number before payment. Wrong number = burn.
+              </p>
+            </div>
+          </div>
+
+          <form id="adOrderForm" class="form">
+            <div class="two-col">
+              <label>
+                Community / Store Name
+                <input id="adName" type="text" required />
+              </label>
+
+              <label>
+                Country
+                <input id="adCountry" type="text" required />
+              </label>
+            </div>
+
+            <label>
+              Language Used
+              <input id="adLanguage" type="text" required />
+            </label>
+
+            <label>
+              Full Bank Account Holder Name
+              <input id="adPayerName" type="text" required />
+            </label>
+
+            <label>
+              Customer Phone Number
+              <input id="adPhone" type="tel" placeholder="Example: 60123456789" required />
+            </label>
+
+            <p class="notice">
+              After submit, it will show as pending. Owner/admin will contact the customer manually.
+            </p>
+
+            <button class="btn primary" type="submit">Submit Advertisement Order</button>
+          </form>
+        </article>
+      </div>
+    </section>
+
+    <section id="registration" class="section">
+      <div class="section-head">
+        <div>
+          <h2>Registration</h2>
+          <p class="muted">Fill in your team registration details.</p>
+        </div>
+
+        <button class="btn ghost" type="button" data-tab-target="home">Back To Feed</button>
+      </div>
+
+      <div class="registration-layout">
+        <article class="card">
+          <h3>Selected Post</h3>
+          <div id="registrationPostSummary" class="post-meta"></div>
+        </article>
+
+        <article class="card">
+          <h3>Submit Registration</h3>
+
+          <form id="registrationForm" class="form">
+            <label>
+              Team Name
+              <input id="regTeamName" type="text" required />
+            </label>
+
+            <label>
+              Leader Name
+              <input id="regLeaderName" type="text" required />
+            </label>
+
+            <label>
+              Leader Phone Number
+              <input id="regLeaderPhone" type="tel" placeholder="Example: 60123456789" required />
+            </label>
+
+            <label>
+              Receipt WhatsApp Link
+              <input id="regReceiptLink" type="url" placeholder="Example: https://wasap.my/60123456789" />
+            </label>
+
+            <p class="notice">
+              For tournament, open the organizer WhatsApp link, send receipt, then submit this registration.
+            </p>
+
+            <button class="btn primary" type="submit">Submit Registration</button>
+          </form>
+        </article>
+      </div>
+    </section>
+
+    <section id="teams" class="section">
+      <div class="section-head">
+        <div>
+          <h2>Teams</h2>
+          <p class="muted">Team leader or team manager can create team list.</p>
+        </div>
+      </div>
+
+      <article class="card">
+        <h3>Add Team</h3>
+
+        <form id="teamForm" class="form">
+          <label>
+            Team Name
+            <input id="teamName" type="text" required />
+          </label>
+
+          <label>
+            Player Details
+            <textarea
+              id="teamPlayers"
+              rows="5"
+              placeholder="One player per line: Name, ID, Server, Role, Age"
+              required
+            ></textarea>
+          </label>
+
+          <label>
+            Team Average Star
+            <input id="teamAverageStar" type="number" min="0" required />
+          </label>
+
+          <p class="notice">
+            Average star will auto-calculate tier. Public list will display tier, not average star.
+          </p>
+
+          <button class="btn primary" type="submit">Add Team</button>
+        </form>
+      </article>
+
+      <div class="section-head">
+        <div>
+          <h2>Registered Teams</h2>
+          <p class="muted">Tier is calculated automatically from average star.</p>
+        </div>
+      </div>
+
+      <div id="teamsList" class="grid team-grid"></div>
+    </section>
+
+    <section id="leaderboard" class="section">
+      <div class="section-head">
+        <div>
+          <h2>Team Leaderboard</h2>
+          <p class="muted">Calculated from scrim results uploaded by team managers.</p>
+        </div>
+      </div>
+
+      <div class="card table-card">
+        <div id="leaderboardList"></div>
+      </div>
+    </section>
+
+    <section id="live" class="section">
+      <div class="section-head">
+        <div>
+          <h2>Live Scores</h2>
+          <p class="muted">Scrim and tournament posts based on their scheduled date and time.</p>
+        </div>
+      </div>
+
+      <div id="liveList" class="grid feed-grid"></div>
+    </section>
+
+    <section id="teamManagement" class="section">
+      <div class="section-head">
+        <div>
+          <h2>Team Management</h2>
+          <p class="muted">
+            Add leader/manager with approval, manage your team and upload scrim results.
+          </p>
+        </div>
+      </div>
+
+      <div id="myTeamsPanel" class="grid team-grid"></div>
+
+      <article class="card">
+        <h3>Add Leader / Manager To Team</h3>
+
+        <form id="addTeamRoleForm" class="form">
+          <label>
+            Your Team
+            <select id="roleTeamSelect" required></select>
+          </label>
+
+          <label>
+            User Email
+            <input id="roleTargetEmail" type="email" required />
+          </label>
+
+          <label>
+            Access Role
+            <select id="roleAccessType" required>
+              <option value="leader">Leader</option>
+              <option value="manager">Manager</option>
+            </select>
+          </label>
+
+          <button class="btn primary" type="submit">Send Approval Request</button>
+        </form>
+      </article>
+
+      <article class="card">
+        <h3>Inbox Team Recruitment / Access Requests</h3>
+        <div id="teamInbox"></div>
+      </article>
+
+      <article class="card">
+        <h3>Upload Scrim Result</h3>
+
+        <form id="scrimResultForm" class="form">
+          <label>
+            Your Managed Team
+            <select id="resultTeamSelect" required></select>
+          </label>
+
+          <label>
+            Opponent Team
+            <select id="opponentTeamSelect" required></select>
+          </label>
+
+          <label>
+            Result
+            <select id="resultOutcome" required>
+              <option value="win">Win</option>
+              <option value="draw">Draw</option>
+              <option value="loss">Loss</option>
+            </select>
+          </label>
+
+          <label>
+            Score
+            <input id="resultScore" type="text" placeholder="Example: 2-0" required />
+          </label>
+
+          <button class="btn primary" type="submit">Upload Result</button>
+        </form>
+      </article>
+
+      <article class="card">
+        <h3>Tournament Bracket Tools</h3>
+        <p class="muted">
+          Organizer gets bracket access when tournament is full or registration is closed.
+        </p>
+
+        <div id="bracketTools"></div>
+      </article>
+    </section>
+
+    <section id="admin" class="section">
+      <div class="section-head">
+        <div>
+          <h2>Admin / Owner Panel</h2>
+          <p class="muted">Only owner and approved admins can access this menu.</p>
+        </div>
+      </div>
+
+      <article class="card owner-only hidden">
+        <h3>Admin Approval Requests</h3>
+        <div id="adminRequestsList"></div>
+      </article>
+
+      <article class="card">
+        <h3>Paid Advertisement Orders</h3>
+        <div id="adOrdersList"></div>
+      </article>
+
+      <article class="card">
+        <h3>Upload Ordered Advertisement</h3>
+
+        <form id="adminAdUploadForm" class="form">
+          <label>
+            Community / Store Name
+            <input id="adminAdName" type="text" required />
+          </label>
+
+          <div class="two-col">
+            <label>
+              Country
+              <input id="adminAdCountry" type="text" required />
+            </label>
+
+            <label>
+              Language
+              <input id="adminAdLanguage" type="text" required />
+            </label>
+          </div>
+
+          <label>
+            Promotion Text
+            <textarea id="adminAdText" rows="4" required></textarea>
+          </label>
+
+          <label>
+            Optional Link
+            <input id="adminAdLink" type="url" placeholder="https://..." />
+          </label>
+
+          <button class="btn primary" type="submit">Publish Advertisement</button>
+        </form>
+      </article>
+
+      <article class="card">
+        <h3>AI Bot Blocked Posts</h3>
+        <div id="blockedPostsList"></div>
+      </article>
+    </section>
+  </main>
+
+  <footer class="footer">
+    © <span id="year"></span> Kyougi Hub. Built for MLBB communities.
+  </footer>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>
